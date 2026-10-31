@@ -30,7 +30,11 @@ std::vector<vk::ExtensionProperties> extensions(const char *layer)
 {
     if (!loader::get()->initialized && !loader::init())
         throw std::runtime_error("Vulkan loader unavailable");
-    return vk::enumerateInstanceExtensionProperties(layer);
+    if (layer) {
+        const std::string layer_name(layer);
+        return vk::enumerateInstanceExtensionProperties(layer_name);
+    }
+    return vk::enumerateInstanceExtensionProperties(nullptr);
 }
 std::vector<vk::LayerProperties> layers()
 {
