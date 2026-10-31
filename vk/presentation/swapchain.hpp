@@ -12,6 +12,8 @@ struct state {
     };
     state *get();
     vk::SwapchainKHR init(const vk::SwapchainCreateInfoKHR &info);
+    vk::ResultValue<uint32_t> acquire(uint64_t timeout = UINT64_MAX,
+                                      vk::Semaphore semaphore = {}, vk::Fence fence = {});
     void shutdown();
 }
 }

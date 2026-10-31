@@ -28,6 +28,10 @@ vk::SwapchainKHR init(const vk::SwapchainCreateInfoKHR &info)
     s.size = static_cast<uint32_t>(s.images.size());
     return handle;
 }
+vk::ResultValue<uint32_t> acquire(uint64_t timeout, vk::Semaphore semaphore, vk::Fence fence)
+{
+    return require_device().acquireNextImageKHR(get()->handle, timeout, semaphore, fence);
+}
 void shutdown()
 {
     auto &s = *get();
