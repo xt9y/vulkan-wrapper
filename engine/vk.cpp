@@ -11,7 +11,7 @@ VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
 
 namespace {
 
-std::unique_ptr<vk::DynamicLoader> dynamic_loader;
+std::unique_ptr<vk::detail::DynamicLoader> dynamic_loader;
 vk::log::callback log_callback = nullptr;
 
 vk::Device require_device()
@@ -88,7 +88,7 @@ state *get() { static state data; return &data; }
 bool init(PFN_vkGetInstanceProcAddr proc)
 {
     if (proc == nullptr) {
-        dynamic_loader = std::make_unique<vk::DynamicLoader>();
+        dynamic_loader = std::make_unique<vk::detail::DynamicLoader>();
         proc = dynamic_loader->getProcAddress<PFN_vkGetInstanceProcAddr>("vkGetInstanceProcAddr");
     }
     if (!proc) {
