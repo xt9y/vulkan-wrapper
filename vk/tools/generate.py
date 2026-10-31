@@ -96,7 +96,20 @@ def signature(command, lookup, visited=None):
         params.append((param.findtext('type'), ''.join(param.itertext()).strip(), param_name))
     return name, result, params
 
-def regenerate(root):
+def exposed_constants(include_root):
+    """Read real C-header declarations, not only vk.xml registry availability."""
+    names = set()
+    for directory in ('vulkan', 'vk_video'):
+        folder = include_root / directory
+        if not folder.is_dir():
+            continue
+        for header in folder.glob('*.h'):
+            source = header.read_text(encoding='utf-8', errors='replace')
+            names.update(re.findall(r'(?m)^\s*#\s*define\s+(VK_[A-Z0-9_]+)\b', source))
+            names.update(re.findall(r'(?m)^\s*(VK_[A-Z0-9_]+)\s*(?:=|,)', source))
+    return names
+
+def regenerate(root, declared_constants=None):
     available, protected = guards(root)
     commands = root.findall('./commands/command')
     by_name = {}
@@ -169,6 +182,8 @@ def regenerate(root):
             continue
         if available and name not in available:
             continue
+        if declared_constants is not None and name not in declared_constants:
+            continue
         if not (name[3].isalpha() or name[3] == '_'):
             continue
         seen_constants.add(name)
@@ -201,7 +216,8 @@ def main():
     parser.add_argument('--vendor')
     args = parser.parse_args()
     root = ET.parse(args.registry).getroot()
-    code, manifest, commands, types = regenerate(root)
+    declared = exposed_constants(Path(args.headers)) if args.headers else None
+    code, manifest, commands, types = regenerate(root, declared)
     h = Path(args.header)
     h.parent.mkdir(parents=True, exist_ok=True)
     h.write_text(code)
