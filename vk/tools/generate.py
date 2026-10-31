@@ -146,12 +146,15 @@ def regenerate(root):
         if not api_filter(typ):
             continue
         name = typ.get('name') or typ.findtext('name')
-        if not name or not name.startswith('Vk') or name in seen_types:
+        if not name or name in seen_types:
             continue
-        if available and name not in available and typ.get('category') != 'basetype':
+        if not (name.startswith('Vk') or name.startswith('PFN_vk')):
+            continue
+        if available and name not in available and typ.get('category') not in ('basetype', 'funcpointer'):
             continue
         seen_types.add(name)
-        alias = f'using {name[2:]} = ::{name};'
+        exported = name[2:] if name.startswith('Vk') else name
+        alias = f'using {exported} = ::{name};'
         protection = guard_expr(protected.get(name))
         if protection:
             alias = '#if ' + protection + '\n' + alias + '\n#endif'
