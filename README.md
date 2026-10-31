@@ -7,6 +7,18 @@ C_Dependency *vulkan = c_git(
     b, "VulkanEngine", "https://github.com/xt9y/vulkan-engine.git", "main");
 c_dep_cbuild(vulkan, "VulkanEngine", C_TARGET_STATIC_LIBRARY);
 c_use(app, vulkan);
+
+C_Dependency *headers = c_git(
+    b, "VulkanHeaders", "https://github.com/KhronosGroup/Vulkan-Headers.git", "main");
+c_dep_header_only(headers);
+c_dep_checkout(headers, "include");
+c_dep_include(headers, "include");
+c_use(app, headers);
+c_flag(app, "-std=c++17");
+
+#ifdef __linux__
+c_link_system(app, "dl");
+#endif
 ```
 
 ## Headers
