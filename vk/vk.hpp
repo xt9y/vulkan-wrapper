@@ -36,4 +36,4 @@
 #include "util/math/quaternion.hpp"
 #include "util/math/scalar.hpp"
 #include "util/math/vector.hpp"
-#include "util/util.hpp"
+#include "util/helper.hpp"

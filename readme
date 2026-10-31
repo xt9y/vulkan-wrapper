@@ -1,9 +1,9 @@
 core
+  result
     vk::check(vk::Result, std::string_view)
     vk::check(VkResult, std::string_view)
-    vk::assertion::that(bool, std::string_view)
 
-log
+  log
     vk::log::set_callback(callback)
     vk::log::write(level, std::string_view)
     vk::log::debug(std::string_view)
@@ -12,13 +12,16 @@ log
     vk::log::error(std::string_view)
     vk::log::level::{debug, info, warning, error}
 
-loader
+  assertion
+    vk::assertion::that(bool, std::string_view)
+
+  loader
     vk::loader::init(PFN_vkGetInstanceProcAddr)
     vk::loader::get()->initialized
     vk::loader::get()->get_instance_proc_addr
     vk::loader::shutdown()
 
-instance
+  instance
     vk::instance::init(const vk::InstanceCreateInfo&)
     vk::instance::adopt(vk::Instance, bool)
     vk::instance::get()->handle
@@ -28,7 +31,7 @@ instance
     vk::instance::layers()
     vk::instance::shutdown()
 
-physical device
+  physical_device
     vk::physical_device::init(uint32_t)
     vk::physical_device::adopt(vk::PhysicalDevice)
     vk::physical_device::pick(vk::QueueFlags)
@@ -41,17 +44,7 @@ physical device
     vk::physical_device::get()->queue_families
     vk::physical_device::shutdown()
 
-surface
-    vk::surface::init(vk::SurfaceKHR, bool)
-    vk::surface::get()->handle
-    vk::surface::get()->owned
-    vk::surface::formats()
-    vk::surface::present_modes()
-    vk::surface::capabilities()
-    vk::surface::supports(uint32_t)
-    vk::surface::shutdown()
-
-device
+  device
     vk::device::init(const vk::DeviceCreateInfo&)
     vk::device::adopt(vk::Device, bool)
     vk::device::get()->handle
@@ -59,7 +52,7 @@ device
     vk::device::idle()
     vk::device::shutdown()
 
-queue
+  queue
     vk::queue::init(uint32_t, uint32_t, uint32_t, uint32_t)
     vk::queue::get()->graphics
     vk::queue::get()->compute
@@ -71,7 +64,18 @@ queue
     vk::queue::get()->present_family
     vk::queue::shutdown()
 
-swapchain
+presentation
+  surface
+    vk::surface::init(vk::SurfaceKHR, bool)
+    vk::surface::get()->handle
+    vk::surface::get()->owned
+    vk::surface::formats()
+    vk::surface::present_modes()
+    vk::surface::capabilities()
+    vk::surface::supports(uint32_t)
+    vk::surface::shutdown()
+
+  swapchain
     vk::swapchain::init(const vk::SwapchainCreateInfoKHR&)
     vk::swapchain::get()->handle
     vk::swapchain::get()->images
@@ -81,12 +85,17 @@ swapchain
     vk::swapchain::get()->size
     vk::swapchain::shutdown()
 
-memory
+  framebuffer
+    vk::framebuffer::create(info)
+    vk::framebuffer::destroy(handle)
+
+resources
+  memory
     vk::memory::type_index(uint32_t, vk::MemoryPropertyFlags)
     vk::memory::allocate(const vk::MemoryRequirements&, vk::MemoryPropertyFlags)
     vk::memory::free(vk::DeviceMemory)
 
-buffer
+  buffer
     vk::buffer::create(vk::DeviceSize, vk::BufferUsageFlags, vk::MemoryPropertyFlags)
     vk::buffer::destroy(resource&)
     vk::buffer::map(resource&)
@@ -100,7 +109,7 @@ buffer
     vk::buffer::resource::properties
     vk::buffer::resource::mapped
 
-image
+  image
     vk::image::create(const vk::ImageCreateInfo&, vk::MemoryPropertyFlags)
     vk::image::destroy(resource&)
     vk::image::resource::handle
@@ -108,21 +117,22 @@ image
     vk::image::resource::size
     vk::image::resource::format
 
-image view
+  image_view
     vk::image_view::create(const vk::ImageViewCreateInfo&)
     vk::image_view::destroy(vk::ImageView)
 
-sampler
+  sampler
     vk::sampler::create(const vk::SamplerCreateInfo&)
     vk::sampler::destroy(vk::Sampler)
 
-shader
+  shader
     vk::shader::read(const std::string&)
     vk::shader::create(const uint32_t*, size_t)
     vk::shader::create(const std::vector<uint32_t>&)
     vk::shader::destroy(vk::ShaderModule)
 
-command
+commands
+  command
     vk::command::init(uint32_t, vk::CommandPoolCreateFlags)
     vk::command::get()->pool
     vk::command::get()->family
@@ -132,20 +142,74 @@ command
     vk::command::free(const std::vector<vk::CommandBuffer>&)
     vk::command::shutdown()
 
-descriptor
+  record
+    vk::record::begin(command, info)
+    vk::record::end(command)
+    vk::record::pipeline(command, bind_point, pipeline)
+    vk::record::viewport(command, viewport)
+    vk::record::scissor(command, rectangle)
+    vk::record::draw(command, vertices, instances, first_vertex, first_instance)
+    vk::record::draw_indexed(command, indices, instances, first_index, offset, first_instance)
+    vk::record::dispatch(command, x, y, z)
+    vk::record::copy(command, source, destination, region)
+
+  submit
+    vk::submit::queue(queue, submits, fence)
+    vk::submit::wait(queue)
+    vk::submit::fence(fence, timeout)
+    vk::submit::reset(fence)
+    vk::submit::present(queue, info)
+
+  sync
+    vk::sync::fence(bool)
+    vk::sync::semaphore()
+    vk::sync::timeline(uint64_t)
+    vk::sync::destroy(vk::Fence)
+    vk::sync::destroy(vk::Semaphore)
+
+  event
+    vk::event::create(info)
+    vk::event::destroy(handle)
+
+descriptors
+  descriptor
     vk::descriptor::init(const vk::DescriptorPoolCreateInfo&)
     vk::descriptor::get()->pool
     vk::descriptor::allocate(const std::vector<vk::DescriptorSetLayout>&)
     vk::descriptor::reset()
     vk::descriptor::shutdown()
 
-pipeline cache
+  descriptor_layout
+    vk::descriptor_layout::create(info)
+    vk::descriptor_layout::destroy(handle)
+
+  descriptor_update
+    vk::descriptor_update::write(writes)
+    vk::descriptor_update::copy(copies)
+    vk::descriptor_update::apply(writes, copies)
+
+pipelines
+  pipeline
+    vk::pipeline::graphics(info, cache)
+    vk::pipeline::compute(info, cache)
+    vk::pipeline::destroy(handle)
+
+  pipeline_layout
+    vk::pipeline_layout::create(info)
+    vk::pipeline_layout::destroy(handle)
+
+  render_pass
+    vk::render_pass::create(info)
+    vk::render_pass::destroy(handle)
+
+  pipeline_cache
     vk::pipeline_cache::init(const vk::PipelineCacheCreateInfo&)
     vk::pipeline_cache::get()->handle
     vk::pipeline_cache::data()
     vk::pipeline_cache::shutdown()
 
-debug
+diagnostics
+  debug
     vk::debug::init(const vk::DebugUtilsMessengerCreateInfoEXT&)
     vk::debug::get()->messenger
     vk::debug::name(vk::ObjectType, uint64_t, const char*)
@@ -153,20 +217,43 @@ debug
     vk::debug::end_label(vk::CommandBuffer)
     vk::debug::shutdown()
 
-synchronization
-    vk::sync::fence(bool)
-    vk::sync::semaphore()
-    vk::sync::timeline(uint64_t)
-    vk::sync::destroy(vk::Fence)
-    vk::sync::destroy(vk::Semaphore)
+  query
+    vk::query::create(info)
+    vk::query::destroy(handle)
 
-utility
+util
+  util
     vk::util::extent(uint32_t, uint32_t)
     vk::util::mip_levels(uint32_t, uint32_t)
     vk::util::aligned(vk::DeviceSize, vk::DeviceSize)
     vk::util::result_string(vk::Result)
 
-math scalars
+util / math
+  scalar
+    vk::util::math::scalar::radians(value)
+    vk::util::math::scalar::degrees(value)
+    vk::util::math::scalar::clamp(value, low, high)
+    vk::util::math::scalar::lerp(a, b, t)
+
+  vector
+    vk::util::math::vector::vec2
+    vk::util::math::vector::vec3
+    vk::util::math::vector::vec4
+    vk::util::math::vector::dot(a, b)
+    vk::util::math::vector::cross(a, b)
+    vk::util::math::vector::normalize(value)
+
+  quaternion
+    vk::util::math::quaternion::quat
+    vk::util::math::quaternion::slerp(a, b, t)
+    vk::util::math::quaternion::rotate(q, v)
+
+  matrix
+    vk::util::math::matrix::mat4
+    vk::util::math::matrix::look_at(eye, target, up)
+    vk::util::math::matrix::perspective(fov, aspect, near, far, flip_y)
+
+  base
     vk::util::math::pi
     vk::util::math::radians(float)
     vk::util::math::degrees(float)
@@ -174,8 +261,6 @@ math scalars
     vk::util::math::lerp(T, T, float)
     vk::util::math::min(T, T)
     vk::util::math::max(T, T)
-
-math vectors
     vk::util::math::vec2
     vk::util::math::vec3
     vk::util::math::vec4
@@ -192,8 +277,6 @@ math vectors
     vk::util::math::distance(vec2|vec3)
     vk::util::math::reflect(vec3, vec3)
     vk::util::math::project(vec3, vec3)
-
-math quaternions
     vk::util::math::quat
     vk::util::math::quatf
     vk::util::math::quat::identity()
@@ -207,8 +290,6 @@ math quaternions
     vk::util::math::nlerp(quat, quat, float)
     vk::util::math::slerp(quat, quat, float)
     vk::util::math::rotate(quat, vec3)
-
-math matrices
     vk::util::math::mat4
     vk::util::math::mat4f
     vk::util::math::mat4::identity()
@@ -224,79 +305,3 @@ math matrices
     vk::util::math::look_at(vec3, vec3, vec3)
     vk::util::math::perspective(float, float, float, float, bool)
     vk::util::math::orthographic(float, float, float, float, float, float, bool)
-
-pipeline
-    vk::pipeline::graphics(info, cache)
-    vk::pipeline::compute(info, cache)
-    vk::pipeline::destroy(handle)
-
-pipeline layout
-    vk::pipeline_layout::create(info)
-    vk::pipeline_layout::destroy(handle)
-
-render pass
-    vk::render_pass::create(info)
-    vk::render_pass::destroy(handle)
-
-framebuffer
-    vk::framebuffer::create(info)
-    vk::framebuffer::destroy(handle)
-
-descriptor layout
-    vk::descriptor_layout::create(info)
-    vk::descriptor_layout::destroy(handle)
-
-descriptor update
-    vk::descriptor_update::write(writes)
-    vk::descriptor_update::copy(copies)
-    vk::descriptor_update::apply(writes, copies)
-
-event
-    vk::event::create(info)
-    vk::event::destroy(handle)
-
-query
-    vk::query::create(info)
-    vk::query::destroy(handle)
-
-record
-    vk::record::begin(command, info)
-    vk::record::end(command)
-    vk::record::pipeline(command, bind_point, pipeline)
-    vk::record::viewport(command, viewport)
-    vk::record::scissor(command, rectangle)
-    vk::record::draw(command, vertices, instances, first_vertex, first_instance)
-    vk::record::draw_indexed(command, indices, instances, first_index, offset, first_instance)
-    vk::record::dispatch(command, x, y, z)
-    vk::record::copy(command, source, destination, region)
-
-submit
-    vk::submit::queue(queue, submits, fence)
-    vk::submit::wait(queue)
-    vk::submit::fence(fence, timeout)
-    vk::submit::reset(fence)
-    vk::submit::present(queue, info)
-
-math / scalar
-    vk::util::math::scalar::radians(value)
-    vk::util::math::scalar::degrees(value)
-    vk::util::math::scalar::clamp(value, low, high)
-    vk::util::math::scalar::lerp(a, b, t)
-
-math / vector
-    vk::util::math::vector::vec2
-    vk::util::math::vector::vec3
-    vk::util::math::vector::vec4
-    vk::util::math::vector::dot(a, b)
-    vk::util::math::vector::cross(a, b)
-    vk::util::math::vector::normalize(value)
-
-math / quaternion
-    vk::util::math::quaternion::quat
-    vk::util::math::quaternion::slerp(a, b, t)
-    vk::util::math::quaternion::rotate(q, v)
-
-math / matrix
-    vk::util::math::matrix::mat4
-    vk::util::math::matrix::look_at(eye, target, up)
-    vk::util::math::matrix::perspective(fov, aspect, near, far, flip_y)
