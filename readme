@@ -314,3 +314,21 @@ util / math
     vk::util::math::look_at(vec3, vec3, vec3)
     vk::util::math::perspective(float, float, float, float, bool)
     vk::util::math::orthographic(float, float, float, float, float, float, bool)
+
+api
+  global
+    vk::api::global::...(...)
+  instance
+    vk::api::instance::...(...)
+  physical_device
+    vk::api::physical_device::...(...)
+  device
+    vk::api::device::...(...)
+  queue
+    vk::api::queue::...(...)
+  command
+    vk::api::command::...(...)
+  types
+    vk::api::types::...
+  constants
+    vk::api::constants::...

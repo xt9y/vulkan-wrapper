@@ -1,4 +1,5 @@
 #include <cbuild.h>
+
 void build(C_Build *b)
 {
     C_Target *engine = c_static_library(b, "VulkanEngine");
@@ -18,8 +19,15 @@ void build(C_Build *b)
         b, "VulkanHeaders", "https://github.com/KhronosGroup/Vulkan-Headers.git", "main");
     c_dep_header_only(headers);
     c_dep_checkout(headers, "include");
+    c_dep_checkout(headers, "registry/vk.xml");
     c_dep_include(headers, "include");
     c_use(engine, headers);
+
+    c_generate(engine, "vk/api/generated.cpp", "@VulkanHeaders@/registry/vk.xml",
+        "python3 vk/tools/generate.py @VulkanHeaders@/registry/vk.xml "
+        "vk/api/generated.hpp vk/api/generated.cpp --readme readme "
+        "--headers @VulkanHeaders@/include --vendor vk");
+
 #ifdef __linux__
     c_link_system(engine, "dl");
 #endif
