@@ -310,5 +310,5 @@ c_link_system(app, "dl");
 - `vk::VideoSessionKHR`
 - `vk::DebugUtilsMessengerEXT`
 - `vk::DispatchLoaderDynamic`
-- `vk::DynamicLoader`
+- `vk::detail::DynamicLoader`
 - `VULKAN_HPP_DEFAULT_DISPATCHER`
