@@ -39,7 +39,7 @@ inline quat euler(float pitch, float yaw, float roll) {
 }
 inline quat nlerp(quat a, quat b, float t) {
     if (dot(a,b) < 0) b = {-b.x,-b.y,-b.z,-b.w};
-    return normalize({lerp(a.x,b.x,t),lerp(a.y,b.y,t),lerp(a.z,b.z,t),lerp(a.w,b.w,t)});
+    return normalize(quat{lerp(a.x,b.x,t),lerp(a.y,b.y,t),lerp(a.z,b.z,t),lerp(a.w,b.w,t)});
 }
 inline quat slerp(quat a, quat b, float t) {
     float d = dot(a,b);
@@ -50,7 +50,7 @@ inline quat slerp(quat a, quat b, float t) {
     float sin_angle = std::sin(angle);
     float x = std::sin((1-t)*angle) / sin_angle;
     float y = std::sin(t*angle) / sin_angle;
-    return normalize({a.x*x+b.x*y,a.y*x+b.y*y,a.z*x+b.z*y,a.w*x+b.w*y});
+    return normalize(quat{a.x*x+b.x*y,a.y*x+b.y*y,a.z*x+b.z*y,a.w*x+b.w*y});
 }
 inline vec3 rotate(quat q, vec3 v) {
     q = normalize(q);
