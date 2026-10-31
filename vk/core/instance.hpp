@@ -4,6 +4,8 @@ namespace vk {
 namespace instance {
 struct state {
         vk::Instance handle{};
+        vk::Instance *api() { return &handle; }
+        const vk::Instance *api() const { return &handle; }
         bool owned = false;
     };
     state *get();

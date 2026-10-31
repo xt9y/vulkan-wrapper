@@ -7,6 +7,7 @@ struct state {
         uint32_t family = UINT32_MAX;
     };
     state *get();
+    inline vk::CommandBuffer *api(vk::CommandBuffer &command) { return &command; }
     vk::CommandPool init(uint32_t family, vk::CommandPoolCreateFlags flags =
                          vk::CommandPoolCreateFlagBits::eResetCommandBuffer);
     std::vector<vk::CommandBuffer> allocate(uint32_t count = 1,

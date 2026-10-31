@@ -4,6 +4,8 @@ namespace vk {
 namespace device {
 struct state {
         vk::Device handle{};
+        vk::Device *api() { return &handle; }
+        const vk::Device *api() const { return &handle; }
         bool owned = false;
     };
     state *get();

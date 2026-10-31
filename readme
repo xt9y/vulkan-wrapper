@@ -25,6 +25,7 @@ core
     vk::instance::init(const vk::InstanceCreateInfo&)
     vk::instance::adopt(vk::Instance, bool)
     vk::instance::get()->handle
+    vk::instance::get()->api()->...
     vk::instance::get()->owned
     vk::instance::physical_devices()
     vk::instance::extensions(const char*)
@@ -38,6 +39,7 @@ core
     vk::physical_device::find_queue(vk::QueueFlags)
     vk::physical_device::supports_extension(const char*)
     vk::physical_device::get()->handle
+    vk::physical_device::get()->api()->...
     vk::physical_device::get()->properties
     vk::physical_device::get()->features
     vk::physical_device::get()->memory
@@ -48,6 +50,7 @@ core
     vk::device::init(const vk::DeviceCreateInfo&)
     vk::device::adopt(vk::Device, bool)
     vk::device::get()->handle
+    vk::device::get()->api()->...
     vk::device::get()->owned
     vk::device::idle()
     vk::device::shutdown()
@@ -55,9 +58,13 @@ core
   queue
     vk::queue::init(uint32_t, uint32_t, uint32_t, uint32_t)
     vk::queue::get()->graphics
+    vk::queue::get()->graphics_api()->...
     vk::queue::get()->compute
+    vk::queue::get()->compute_api()->...
     vk::queue::get()->transfer
+    vk::queue::get()->transfer_api()->...
     vk::queue::get()->present
+    vk::queue::get()->present_api()->...
     vk::queue::get()->graphics_family
     vk::queue::get()->compute_family
     vk::queue::get()->transfer_family
@@ -136,6 +143,7 @@ commands
   command
     vk::command::init(uint32_t, vk::CommandPoolCreateFlags)
     vk::command::get()->pool
+    vk::command::api(command)->...
     vk::command::get()->family
     vk::command::allocate(uint32_t, vk::CommandBufferLevel)
     vk::command::begin_one_time()

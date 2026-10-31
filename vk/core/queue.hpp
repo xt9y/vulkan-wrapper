@@ -7,6 +7,10 @@ struct state {
         vk::Queue compute{};
         vk::Queue transfer{};
         vk::Queue present{};
+        vk::Queue *graphics_api() { return &graphics; }
+        vk::Queue *compute_api() { return &compute; }
+        vk::Queue *transfer_api() { return &transfer; }
+        vk::Queue *present_api() { return &present; }
         uint32_t graphics_family = UINT32_MAX;
         uint32_t compute_family = UINT32_MAX;
         uint32_t transfer_family = UINT32_MAX;

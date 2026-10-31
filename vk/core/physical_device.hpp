@@ -4,6 +4,8 @@ namespace vk {
 namespace physical_device {
 struct state {
         vk::PhysicalDevice handle{};
+        vk::PhysicalDevice *api() { return &handle; }
+        const vk::PhysicalDevice *api() const { return &handle; }
         vk::PhysicalDeviceProperties properties{};
         vk::PhysicalDeviceFeatures features{};
         vk::PhysicalDeviceMemoryProperties memory{};
