@@ -1,10 +1,17 @@
 #include <cbuild.h>
-
 void build(C_Build *b)
 {
     C_Target *engine = c_static_library(b, "VulkanEngine");
-    c_sources(engine, "engine/vk.cpp");
-    c_include(engine, "engine");
+    c_sources(engine, "vk/core/*.cpp");
+    c_sources(engine, "vk/presentation/*.cpp");
+    c_sources(engine, "vk/resources/*.cpp");
+    c_sources(engine, "vk/commands/*.cpp");
+    c_sources(engine, "vk/descriptors/*.cpp");
+    c_sources(engine, "vk/pipelines/*.cpp");
+    c_sources(engine, "vk/diagnostics/*.cpp");
+    c_sources(engine, "vk/util/*.cpp");
+    c_include(engine, ".");
+    c_include(engine, "vk");
     c_flag(engine, "-std=c++17");
 
     C_Dependency *headers = c_git(
@@ -13,7 +20,6 @@ void build(C_Build *b)
     c_dep_checkout(headers, "include");
     c_dep_include(headers, "include");
     c_use(engine, headers);
-
 #ifdef __linux__
     c_link_system(engine, "dl");
 #endif
