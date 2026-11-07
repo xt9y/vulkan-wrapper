@@ -16,13 +16,18 @@ void build(C_Build *b)
     c_flag(engine, "-std=c++17");
 
     C_Dependency *headers = c_git(
-        b, "VulkanHeaders", "https://github.com/KhronosGroup/Vulkan-Headers.git", "main");
+        b, "VulkanHeaders", "https://github.com/KhronosGroup/Vulkan-Headers.git", "9fbc2a782ee3f8a4db64e7d991e23da75e893f44");
     c_dep_header_only(headers);
     c_dep_include(headers, "include");
     c_use(engine, headers);
 
+#ifdef _WIN32
+#define VK_PYTHON "python"
+#else
+#define VK_PYTHON "python3"
+#endif
     c_generate(engine, "vk/api/generated.cpp", "@VulkanHeaders@/registry/vk.xml",
-        "python3 vk/tools/generate.py @VulkanHeaders@/registry/vk.xml "
+        VK_PYTHON " vk/tools/generate.py @VulkanHeaders@/registry/vk.xml "
         "vk/api/generated.hpp vk/api/generated.cpp --readme readme "
         "--headers @VulkanHeaders@/include --vendor vk");
 
