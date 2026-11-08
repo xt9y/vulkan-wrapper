@@ -2,7 +2,7 @@
 
 void build(C_Build *b)
 {
-    C_Target *engine = c_static_library(b, "VulkanEngine");
+    C_Target *engine = c_static_library(b, "VulkanWrapper");
     c_sources(engine, "vk/core/*.cpp");
     c_sources(engine, "vk/presentation/*.cpp");
     c_sources(engine, "vk/resources/*.cpp");
