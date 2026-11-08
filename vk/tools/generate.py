@@ -193,7 +193,7 @@ def regenerate(root, declared_constants=None):
             constant = '#if ' + protection + '\n' + constant + '\n#endif'
         constants.append(constant)
     output = [
-        '#pragma once', '#include "../common.hpp"', '#include <stdexcept>',
+        '#pragma once', '#include <vk/common.hpp>', '#include <stdexcept>',
         '', 'namespace vk::api::types {', *type_lines, '}', '',
         'namespace vk::api::constants {', *constants, '}', ''
     ]
